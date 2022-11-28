@@ -10,10 +10,17 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        let rootVC = UIViewController()
+        let nav = UINavigationController(rootViewController: rootVC)
+        self.window?.rootViewController = nav
+        self.window?.makeKeyAndVisible()
+        let camera = CameraController()
+        self.window?.rootViewController?.present(camera, animated: true, completion: nil)
         return true
     }
 
