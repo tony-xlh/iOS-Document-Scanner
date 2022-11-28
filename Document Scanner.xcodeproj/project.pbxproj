@@ -17,6 +17,7 @@
 		BE22F3902934958B00DA6EEC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F38F2934958B00DA6EEC /* CameraController.swift */; };
 		BE22F3922934959A00DA6EEC /* CroppingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F3912934959A00DA6EEC /* CroppingController.swift */; };
 		BE22F394293495A900DA6EEC /* ResultViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F393293495A900DA6EEC /* ResultViewerController.swift */; };
+		BEE81C8C2934A3CF0013997F /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE81C8B2934A3CF0013997F /* PreviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		BE22F38F2934958B00DA6EEC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		BE22F3912934959A00DA6EEC /* CroppingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CroppingController.swift; sourceTree = "<group>"; };
 		BE22F393293495A900DA6EEC /* ResultViewerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewerController.swift; sourceTree = "<group>"; };
+		BEE81C8B2934A3CF0013997F /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 				BE22F38F2934958B00DA6EEC /* CameraController.swift */,
 				BE22F3912934959A00DA6EEC /* CroppingController.swift */,
 				BE22F393293495A900DA6EEC /* ResultViewerController.swift */,
+				BEE81C8B2934A3CF0013997F /* PreviewView.swift */,
 			);
 			path = "Document Scanner";
 			sourceTree = "<group>";
@@ -97,7 +100,6 @@
 				7500A4B3A6D057664876D19C /* Pods-Document Scanner.debug.xcconfig */,
 				BB6ACD42E918FAB04256F263 /* Pods-Document Scanner.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -200,6 +202,7 @@
 			files = (
 				BE22F3802934951500DA6EEC /* ViewController.swift in Sources */,
 				BE22F37C2934951500DA6EEC /* AppDelegate.swift in Sources */,
+				BEE81C8C2934A3CF0013997F /* PreviewView.swift in Sources */,
 				BE22F3902934958B00DA6EEC /* CameraController.swift in Sources */,
 				BE22F37E2934951500DA6EEC /* SceneDelegate.swift in Sources */,
 				BE22F394293495A900DA6EEC /* ResultViewerController.swift in Sources */,
