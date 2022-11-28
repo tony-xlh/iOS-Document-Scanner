@@ -6,21 +6,14 @@
 //
 
 import UIKit
+import DynamsoftDocumentNormalizer
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    var window: UIWindow?
+class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListener  {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        let rootVC = UIViewController()
-        let nav = UINavigationController(rootViewController: rootVC)
-        self.window?.rootViewController = nav
-        self.window?.makeKeyAndVisible()
-        let camera = CameraController()
-        self.window?.rootViewController?.present(camera, animated: true, completion: nil)
+        DynamsoftLicenseManager.initLicense("DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9", verificationDelegate: self)
         return true
     }
 
@@ -36,6 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+    func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
+        // Add your code to execute when the license server handles callback.
     }
 
 
