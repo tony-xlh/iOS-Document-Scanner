@@ -7,10 +7,12 @@
 
 import UIKit
 import AVFoundation
+import DynamsoftDocumentNormalizer
 
 class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var previewView: PreviewView!
     var captureSession: AVCaptureSession!
+    var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -50,8 +52,28 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
        {
            print("output")
+           let imageBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+           CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
+           let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
+           let bufferSize = CVPixelBufferGetDataSize(imageBuffer)
+           let width = CVPixelBufferGetWidth(imageBuffer)
+           let height = CVPixelBufferGetHeight(imageBuffer)
+           let bpr = CVPixelBufferGetBytesPerRow(imageBuffer)
+           CVPixelBufferUnlockBaseAddress(imageBuffer, .readOnly)
+           let buffer = Data(bytes: baseAddress!, count: bufferSize)
+          
+           let imageData = iImageData.init()
+           imageData.bytes = buffer
+           imageData.width = width
+           imageData.height = height
+           imageData.stride = bpr
+           imageData.format = .ARGB_8888
+           let results = try? ddn.detectQuadFromBuffer(imageData)
+           if results != nil {
+               print(results?.count)
+           }
            
-       }
+        }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
