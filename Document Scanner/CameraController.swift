@@ -34,6 +34,7 @@ class CameraController: UIViewController {
                 self.captureSession.addInput(videoInput)
                 self.previewView.videoPreviewLayer.session = self.captureSession
             }
+            self.captureSession.startRunning()
         } catch {
             // Configuration failed. Handle error.
         }
