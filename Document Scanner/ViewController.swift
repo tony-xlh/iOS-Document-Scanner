@@ -40,6 +40,7 @@ class ViewController: UIViewController {
     func buttonAction() {
         print("button pressed")
         let camera = CameraController()
+        camera.modalPresentationStyle = .fullScreen
         self.present(camera, animated: true)
     }
 }
