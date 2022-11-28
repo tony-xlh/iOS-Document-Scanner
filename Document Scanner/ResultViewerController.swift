@@ -5,4 +5,15 @@
 //  Created by xulihang on 2022/11/27.
 //
 
-import Foundation
+import UIKit
+
+class ResultViewerController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
