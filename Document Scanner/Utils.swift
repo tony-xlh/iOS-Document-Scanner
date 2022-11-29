@@ -70,7 +70,7 @@ class Utils {
     }
 
     static func getRectFromPoints(points:[CGPoint]) -> CGRect {
-        let minX,minY,maxX,maxY:CGFloat
+        var minX,minY,maxX,maxY:CGFloat
 
         minX = points[0].x
         minY = points[0].y
