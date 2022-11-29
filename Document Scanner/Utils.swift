@@ -46,4 +46,45 @@ class Utils {
             return viewWidth/frameHeight
         }
     }
+    
+    static func intersectionOverUnion(pts1:[CGPoint] ,pts2:[CGPoint]) -> Double {
+        let rect1 = getRectFromPoints(points:pts1);
+        let rect2 = getRectFromPoints(points:pts2);
+        return rectIntersectionOverUnion(rect1:rect1, rect2:rect2);
+    }
+
+    static func rectIntersectionOverUnion(rect1:CGRect, rect2:CGRect) -> Double {
+        let leftColumnMax = max(rect1.minX, rect2.minX);
+        let rightColumnMin = min(rect1.maxX,rect2.maxX);
+        let upRowMax = max(rect1.minY, rect2.minY);
+        let downRowMin = min(rect1.maxY,rect2.maxY);
+
+        if (leftColumnMax>=rightColumnMin || downRowMin<=upRowMax){
+          return 0;
+        }
+
+        let s1 = rect1.width*rect1.height;
+        let s2 = rect2.width*rect2.height;
+        let sCross = (downRowMin-upRowMax)*(rightColumnMin-leftColumnMax);
+        return sCross/(s1+s2-sCross);
+    }
+
+    static func getRectFromPoints(points:[CGPoint]) -> CGRect {
+        let minX,minY,maxX,maxY:CGFloat
+
+        minX = points[0].x
+        minY = points[0].y
+        maxX = 0
+        maxY = 0
+
+        for point in points {
+            minX = min(point.x,minX)
+            minY = min(point.y,minY)
+            maxX = max(point.x,maxX)
+            maxY = max(point.y,maxY)
+        }
+        
+        let r = CGRect(x: minX, y: minY, width: maxX-minX, height: maxY-minY)
+        return r
+    }
 }
