@@ -14,6 +14,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     var captureSession: AVCaptureSession!
     var overlay: Overlay!
     var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
+    var previousResults:[iDetectedQuadResult] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -78,6 +79,17 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         if results != nil {
             print(results?.count ?? 0)
             if results?.count ?? 0>0 {
+                if self.previousResults.count == 2 {
+                    self.previousResults.append(results![0])
+                    if steady() {
+                        self.captureSession.stopRunning()
+                    }else{
+                        self.previousResults.remove(at: 0)
+                    }
+                }else{
+                    self.previousResults.append(results![0])
+                }
+                
                 DispatchQueue.main.async {
                     self.overlay.frameWidth = Double(width)
                     self.overlay.frameHeight = Double(height)
@@ -87,6 +99,21 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                     self.overlay.setNeedsDisplay()
                 }
             }
+        }
+    }
+    
+    func steady() -> Bool {
+        let points1,points2,points3:[CGPoint]
+        points1 = self.previousResults[0].location.points as! [CGPoint]
+        points2 = self.previousResults[1].location.points as! [CGPoint]
+        points3 = self.previousResults[2].location.points as! [CGPoint]
+        let iou1 = Utils.intersectionOverUnion(pts1: points1,pts2: points2)
+        let iou2 = Utils.intersectionOverUnion(pts1: points1,pts2: points3)
+        let iou3 = Utils.intersectionOverUnion(pts1: points2,pts2: points3)
+        if iou1>0.9 && iou2>0.9 && iou3>0.9 {
+            return true
+        }else{
+            return false
         }
     }
 
