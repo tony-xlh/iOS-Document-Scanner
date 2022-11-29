@@ -54,7 +54,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                     self.captureSession.addOutput(photoOutput)
                 }
                 
-                self.captureSession.sessionPreset = AVCaptureSession.Preset.hd1280x720
+                self.captureSession.sessionPreset = AVCaptureSession.Preset.hd1920x1080
                 
                 var queue:DispatchQueue
                 queue = DispatchQueue(label: "queue")
