@@ -44,6 +44,9 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 queue = DispatchQueue(label: "queue")
                 output.setSampleBufferDelegate(self as AVCaptureVideoDataOutputSampleBufferDelegate, queue: queue)
                 output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
+                //output.automaticallyConfiguresOutputBufferDimensions = false
+                //output.deliversPreviewSizedOutputBuffers = true
+                
                 self.captureSession.startRunning()
             }
             
@@ -53,60 +56,37 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     }
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
-       {
-           print("output")
-           let image = imageFromSampleBuffer(sampleBuffer: sampleBuffer)
-           let results = try? ddn.detectQuadFromImage(image)
-           let width = image.size.width
-           let height = image.size.height
-           if results != nil {
-               print(results?.count ?? 0)
-               if results?.count ?? 0>0 {
-                   DispatchQueue.main.async {
-                       self.overlay.xPercent = self.view.frame.width/Double(width)
-                       self.overlay.yPercent = self.view.frame.height/Double(height)
-                       self.overlay.result=results?[0]
-                       self.overlay.setNeedsDisplay()
-                   }
-               }
-           }
+    {
+        print("output")
+        let imageBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
+        CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
+        let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
+        let bufferSize = CVPixelBufferGetDataSize(imageBuffer)
+        let width = CVPixelBufferGetWidth(imageBuffer)
+        let height = CVPixelBufferGetHeight(imageBuffer)
+        let bpr = CVPixelBufferGetBytesPerRow(imageBuffer)
+        CVPixelBufferUnlockBaseAddress(imageBuffer, .readOnly)
+        let buffer = Data(bytes: baseAddress!, count: bufferSize)
+     
+        let imageData = iImageData.init()
+        imageData.bytes = buffer
+        imageData.width = width
+        imageData.height = height
+        imageData.stride = bpr
+        imageData.format = .ARGB_8888
+        let results = try? ddn.detectQuadFromBuffer(imageData)
+        if results != nil {
+            print(results?.count ?? 0)
+            if results?.count ?? 0>0 {
+                DispatchQueue.main.async {
+                    self.overlay.xPercent = self.view.frame.width/Double(width)
+                    self.overlay.yPercent = self.view.frame.height/Double(height)
+                    self.overlay.result=results?[0]
+                    self.overlay.setNeedsDisplay()
+                }
+            }
         }
-    
-    func imageFromSampleBuffer(sampleBuffer : CMSampleBuffer) -> UIImage
-     {
-       // Get a CMSampleBuffer's Core Video image buffer for the media data
-       let  imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-       // Lock the base address of the pixel buffer
-       CVPixelBufferLockBaseAddress(imageBuffer!, CVPixelBufferLockFlags.readOnly);
-
-
-       // Get the number of bytes per row for the pixel buffer
-       let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer!);
-
-       // Get the number of bytes per row for the pixel buffer
-       let bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer!);
-       // Get the pixel buffer width and height
-       let width = CVPixelBufferGetWidth(imageBuffer!);
-       let height = CVPixelBufferGetHeight(imageBuffer!);
-
-       // Create a device-dependent RGB color space
-       let colorSpace = CGColorSpaceCreateDeviceRGB();
-
-       // Create a bitmap graphics context with the sample buffer data
-       var bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Little.rawValue
-       bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
-       //let bitmapInfo: UInt32 = CGBitmapInfo.alphaInfoMask.rawValue
-       let context = CGContext.init(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo)
-       // Create a Quartz image from the pixel data in the bitmap graphics context
-       let quartzImage = context?.makeImage();
-       // Unlock the pixel buffer
-       CVPixelBufferUnlockBaseAddress(imageBuffer!, CVPixelBufferLockFlags.readOnly);
-
-       // Create an image object from the Quartz image
-       let image = UIImage.init(cgImage: quartzImage!);
-
-       return (image);
-     }
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
