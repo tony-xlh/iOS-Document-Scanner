@@ -17,6 +17,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     var overlay: Overlay!
     var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
     var previousResults:[iDetectedQuadResult] = []
+    var previousDetectedTime = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -94,6 +95,10 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
     {
+        if Int(NSDate().timeIntervalSince1970*1_000) - previousDetectedTime < 200 {
+            //"too fast"
+            return
+        }
         let imageBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
         CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
         let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
@@ -114,6 +119,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         print(width)
         print(height)
         let results = try? ddn.detectQuadFromBuffer(imageData)
+        previousDetectedTime = Int(NSDate().timeIntervalSince1970*1_000)
         if results != nil {
             print(results?.count ?? 0)
             if results?.count ?? 0>0 {
