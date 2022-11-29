@@ -43,7 +43,19 @@ class Overlay: UIView {
     func updatePoints(_ points:[CGPoint]) -> [CGPoint]{
         var newPoints:[CGPoint] = []
         for point in points {
-            let newPoint = CGPoint(x: point.x * xPercent(), y: point.y * yPercent())
+            var x = point.x
+            var y = point.y
+            let orientation = UIDevice.current.orientation
+            if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
+                x = frameHeight - point.y;
+                y = point.x;
+            } else if orientation == .landscapeRight {
+                x = frameWidth - point.x;
+                y = frameHeight - point.y;
+            }
+            x = x * xPercent()
+            y = y * yPercent()
+            let newPoint = CGPoint(x: x, y: y)
             newPoints.append(newPoint)
         }
         return newPoints
