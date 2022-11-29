@@ -79,8 +79,10 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             print(results?.count ?? 0)
             if results?.count ?? 0>0 {
                 DispatchQueue.main.async {
-                    self.overlay.xPercent = self.view.frame.width/Double(width)
-                    self.overlay.yPercent = self.view.frame.height/Double(height)
+                    self.overlay.frameWidth = Double(width)
+                    self.overlay.frameHeight = Double(height)
+                    self.overlay.viewWidth = self.view.frame.width
+                    self.overlay.viewHeight = self.view.frame.height
                     self.overlay.result=results?[0]
                     self.overlay.setNeedsDisplay()
                 }

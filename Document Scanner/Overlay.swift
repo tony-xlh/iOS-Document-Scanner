@@ -10,8 +10,10 @@ import DynamsoftDocumentNormalizer
 
 class Overlay: UIView {
     var result:iDetectedQuadResult? = nil
-    var xPercent = 1.0
-    var yPercent = 1.0
+    var frameWidth = 1280.0
+    var frameHeight = 720.0
+    var viewWidth = 1280.0
+    var viewHeight = 720.0
     override func draw(_ rect: CGRect) {
         if result != nil {
             let aPath = UIBezierPath()
@@ -41,10 +43,26 @@ class Overlay: UIView {
     func updatePoints(_ points:[CGPoint]) -> [CGPoint]{
         var newPoints:[CGPoint] = []
         for point in points {
-            let newPoint = CGPoint(x: point.x * xPercent, y: point.y * yPercent)
+            let newPoint = CGPoint(x: point.x * xPercent(), y: point.y * yPercent())
             newPoints.append(newPoint)
         }
         return newPoints
+    }
+    
+    func xPercent() -> Double {
+        if (frameWidth>frameHeight && viewWidth>viewHeight) {
+            return viewWidth/frameWidth
+        }else{
+            return viewWidth/frameHeight
+        }
+    }
+    
+    func yPercent() -> Double {
+        if (frameWidth>frameHeight && viewWidth>viewHeight) {
+            return viewWidth/frameWidth
+        }else{
+            return viewWidth/frameHeight
+        }
     }
     
 }
