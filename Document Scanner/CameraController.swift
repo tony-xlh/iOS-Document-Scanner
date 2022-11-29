@@ -9,9 +9,11 @@ import UIKit
 import AVFoundation
 import DynamsoftDocumentNormalizer
 
-class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     var previewView: PreviewView!
     var captureSession: AVCaptureSession!
+    var photoOutput: AVCapturePhotoOutput!
+    var videoOutput: AVCaptureVideoDataOutput!
     var overlay: Overlay!
     var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
     var previousResults:[iDetectedQuadResult] = []
@@ -31,7 +33,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
 
         // Find the default audio device.
         guard let videoDevice = AVCaptureDevice.default(for: .video) else { return }
-
+        
         do {
             // Wrap the video device in a capture device input.
             let videoInput = try AVCaptureDeviceInput(device: videoDevice)
@@ -39,15 +41,25 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             if self.captureSession.canAddInput(videoInput) {
                 self.captureSession.addInput(videoInput)
                 self.previewView.videoPreviewLayer.session = self.captureSession
-                let output = AVCaptureVideoDataOutput.init()
-                self.captureSession.addOutput(output)
+                
+                self.videoOutput = AVCaptureVideoDataOutput.init()
+                if self.captureSession.canAddOutput(self.videoOutput) {
+                    self.captureSession.addOutput(videoOutput)
+                }
+                
+                self.photoOutput = AVCapturePhotoOutput()
+                self.photoOutput.isHighResolutionCaptureEnabled = true
+                //self.photoOutput.
+                if self.captureSession.canAddOutput(self.photoOutput) {
+                    self.captureSession.addOutput(photoOutput)
+                }
+                
+                self.captureSession.sessionPreset = AVCaptureSession.Preset.hd1280x720
+                
                 var queue:DispatchQueue
                 queue = DispatchQueue(label: "queue")
-                output.setSampleBufferDelegate(self as AVCaptureVideoDataOutputSampleBufferDelegate, queue: queue)
-                output.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
-                //output.automaticallyConfiguresOutputBufferDimensions = false
-                //output.deliversPreviewSizedOutputBuffers = true
-                
+                self.videoOutput.setSampleBufferDelegate(self as AVCaptureVideoDataOutputSampleBufferDelegate, queue: queue)
+                self.videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey : kCVPixelFormatType_32BGRA] as [String : Any]
                 self.captureSession.startRunning()
             }
             
@@ -56,9 +68,32 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         }
     }
     
+    func takePhoto(){
+        //self.captureSession.sessionPreset = AVCaptureSession.Preset.hd4K3840x2160
+        
+        let photoSettings: AVCapturePhotoSettings
+        photoSettings = AVCapturePhotoSettings()
+        photoSettings.isHighResolutionPhotoEnabled = true
+        self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
+        print(self.photoOutput.description)
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let error = error {
+            print("Error:", error)
+        } else {
+            self.captureSession.stopRunning()
+            if let imageData = photo.fileDataRepresentation() {
+                let image = UIImage(data: imageData)
+                print(image?.size.width)
+                print(image?.size.height)
+            }
+        }
+    }
+
+    
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
     {
-        print("output")
         let imageBuffer:CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
         CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
         let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
@@ -75,6 +110,9 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         imageData.height = height
         imageData.stride = bpr
         imageData.format = .ARGB_8888
+        print("resolution")
+        print(width)
+        print(height)
         let results = try? ddn.detectQuadFromBuffer(imageData)
         if results != nil {
             print(results?.count ?? 0)
@@ -82,7 +120,8 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 if self.previousResults.count == 2 {
                     self.previousResults.append(results![0])
                     if steady() {
-                        self.captureSession.stopRunning()
+                        takePhoto()
+                        //self.captureSession.stopRunning()
                     }else{
                         self.previousResults.remove(at: 0)
                     }
