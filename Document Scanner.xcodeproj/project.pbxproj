@@ -17,6 +17,7 @@
 		BE22F3902934958B00DA6EEC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F38F2934958B00DA6EEC /* CameraController.swift */; };
 		BE22F3922934959A00DA6EEC /* CroppingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F3912934959A00DA6EEC /* CroppingController.swift */; };
 		BE22F394293495A900DA6EEC /* ResultViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE22F393293495A900DA6EEC /* ResultViewerController.swift */; };
+		BEC95B6329359DA90031DC7D /* Overlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC95B6229359DA90031DC7D /* Overlay.swift */; };
 		BEE81C8C2934A3CF0013997F /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE81C8B2934A3CF0013997F /* PreviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		BE22F38F2934958B00DA6EEC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		BE22F3912934959A00DA6EEC /* CroppingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CroppingController.swift; sourceTree = "<group>"; };
 		BE22F393293495A900DA6EEC /* ResultViewerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewerController.swift; sourceTree = "<group>"; };
+		BEC95B6229359DA90031DC7D /* Overlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlay.swift; sourceTree = "<group>"; };
 		BEE81C8B2934A3CF0013997F /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				BE22F3912934959A00DA6EEC /* CroppingController.swift */,
 				BE22F393293495A900DA6EEC /* ResultViewerController.swift */,
 				BEE81C8B2934A3CF0013997F /* PreviewView.swift */,
+				BEC95B6229359DA90031DC7D /* Overlay.swift */,
 			);
 			path = "Document Scanner";
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 			files = (
 				BE22F3802934951500DA6EEC /* ViewController.swift in Sources */,
 				BE22F37C2934951500DA6EEC /* AppDelegate.swift in Sources */,
+				BEC95B6329359DA90031DC7D /* Overlay.swift in Sources */,
 				BEE81C8C2934A3CF0013997F /* PreviewView.swift in Sources */,
 				BE22F3902934958B00DA6EEC /* CameraController.swift in Sources */,
 				BE22F37E2934951500DA6EEC /* SceneDelegate.swift in Sources */,

@@ -12,12 +12,15 @@ import DynamsoftDocumentNormalizer
 class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     var previewView: PreviewView!
     var captureSession: AVCaptureSession!
+    var overlay: Overlay!
     var ddn:DynamsoftDocumentNormalizer = DynamsoftDocumentNormalizer()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.overlay = Overlay()
         self.previewView = PreviewView()
         self.view.addSubview(self.previewView)
+        self.view.addSubview(self.overlay)
         startCamera();
     }
     
@@ -70,9 +73,16 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
            imageData.format = .ARGB_8888
            let results = try? ddn.detectQuadFromBuffer(imageData)
            if results != nil {
-               print(results?.count)
+               print(results?.count ?? 0)
+               if results?.count ?? 0>0 {
+                   DispatchQueue.main.async {
+                       self.overlay.xPercent = self.view.frame.width/Double(width)
+                       self.overlay.yPercent = self.view.frame.height/Double(height)
+                       self.overlay.result=results?[0]
+                       self.overlay.setNeedsDisplay()
+                   }
+               }
            }
-           
         }
 
     override func viewDidLayoutSubviews() {
@@ -83,6 +93,14 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             let x: CGFloat = 0.0
             let y: CGFloat = 0.0
             previewView.frame = CGRect.init(x: x, y: y, width: width, height: height)
+        }
+        if let overlay = self.overlay {
+            let width: CGFloat = view.frame.width
+            let height: CGFloat = view.frame.height
+            let x: CGFloat = 0.0
+            let y: CGFloat = 0.0
+            overlay.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
+            overlay.frame = CGRect.init(x: x, y: y, width: width, height: height)
         }
     }
 }
