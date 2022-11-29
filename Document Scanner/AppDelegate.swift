@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListen
     
     func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
         // Add your code to execute when the license server handles callback.
+        print(error?.localizedDescription)
     }
 
 
