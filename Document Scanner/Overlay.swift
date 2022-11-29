@@ -18,7 +18,7 @@ class Overlay: UIView {
         if result != nil {
             let aPath = UIBezierPath()
             var CGPoints = result?.location.points as! [CGPoint]
-            CGPoints = updatePoints(CGPoints)
+            CGPoints = Utils.updatePoints(CGPoints,frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
             print(CGPoints[0].x)
             print(CGPoints[1].y)
             aPath.move(to: CGPoints[0])
@@ -40,41 +40,7 @@ class Overlay: UIView {
         }
     }
     
-    func updatePoints(_ points:[CGPoint]) -> [CGPoint]{
-        var newPoints:[CGPoint] = []
-        for point in points {
-            var x = point.x
-            var y = point.y
-            let orientation = UIDevice.current.orientation
-            if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
-                x = frameHeight - point.y;
-                y = point.x;
-            } else if orientation == .landscapeRight {
-                x = frameWidth - point.x;
-                y = frameHeight - point.y;
-            }
-            x = x * xPercent()
-            y = y * yPercent()
-            let newPoint = CGPoint(x: x, y: y)
-            newPoints.append(newPoint)
-        }
-        return newPoints
-    }
     
-    func xPercent() -> Double {
-        if (frameWidth>frameHeight && viewWidth>viewHeight) {
-            return viewWidth/frameWidth
-        }else{
-            return viewWidth/frameHeight
-        }
-    }
     
-    func yPercent() -> Double {
-        if (frameWidth>frameHeight && viewWidth>viewHeight) {
-            return viewWidth/frameWidth
-        }else{
-            return viewWidth/frameHeight
-        }
-    }
     
 }
