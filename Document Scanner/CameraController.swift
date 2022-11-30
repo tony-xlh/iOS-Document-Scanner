@@ -88,8 +88,15 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 let image = UIImage(data: imageData)
                 print(image?.size.width)
                 print(image?.size.height)
+                navigateToCropper(image!)
             }
         }
+    }
+    
+    func navigateToCropper(_ image:UIImage){
+        let controller = CroppingController()
+        controller.image = image
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     

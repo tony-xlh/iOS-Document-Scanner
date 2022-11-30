@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         self.button = UIButton(frame: .zero)
         self.button.setTitle("Scan Document", for: .normal)
         self.button.setTitleColor(.systemBlue, for: .normal)
@@ -22,7 +23,6 @@ class ViewController: UIViewController {
                          action: #selector(buttonAction),
                          for: .touchUpInside)
         self.view.addSubview(self.button)
-        self.title = "首页"
     }
 
     override func viewDidLayoutSubviews() {
@@ -39,9 +39,9 @@ class ViewController: UIViewController {
     @objc
     func buttonAction() {
         print("button pressed")
-        let camera = CameraController()
-        camera.modalPresentationStyle = .fullScreen
-        self.present(camera, animated: true)
+        let nav = UINavigationController(rootViewController: CameraController())
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true, completion: nil)
     }
 }
 

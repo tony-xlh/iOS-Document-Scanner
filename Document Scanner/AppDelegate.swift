@@ -10,10 +10,18 @@ import DynamsoftDocumentNormalizer
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListener  {
-
+    var window:UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        DynamsoftLicenseManager.initLicense("DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9", verificationDelegate: self)
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let navigationController = UINavigationController()
+        window?.rootViewController = navigationController
+        let viewController = ViewController()
+        
+        navigationController.pushViewController(viewController, animated: true)
+        
+        window?.makeKeyAndVisible()
+        DynamsoftLicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxMDc0MDY2LVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMTA3NDA2NiIsImNoZWNrQ29kZSI6MTYyNTI3MTI4OH0=", verificationDelegate: self)
         return true
     }
 
