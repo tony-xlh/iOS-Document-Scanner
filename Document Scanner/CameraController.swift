@@ -187,5 +187,16 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             overlay.frame = CGRect.init(x: x, y: y, width: width, height: height)
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        previousResults.removeAll()
+        self.captureSession.startRunning()
+    }
+
+    override func viewWillDisappear(_ animated: Bool){
+        super.viewWillDisappear(animated)
+        self.captureSession.stopRunning()
+    }
 }
 
