@@ -28,10 +28,29 @@ class CroppingController: UIViewController {
         let okayButton =  UIBarButtonItem.init(title: "Okay", style: .plain, target: self, action: #selector(okayAction))
         let flexibleSpace = UIBarButtonItem.flexibleSpace()
         self.toolbar.items = [retakeButton,flexibleSpace,okayButton]
+        
         self.view.addSubview(self.imageView)
         self.view.addSubview(self.overlay)
         self.view.addSubview(self.toolbar)
+        
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action:  #selector (self.panAction (_:)))
+        
+        self.view.addGestureRecognizer(panGesture)
         detect()
+    }
+    
+    @objc func tapAction(_ sender:UITapGestureRecognizer){
+        // do other task
+        print("tap gesture")
+        print(sender.view?.description)
+    }
+    
+    
+    @objc func panAction(_ sender:UIPanGestureRecognizer){
+        // do other task
+        print("pan gesture")
+        print(sender.view?.description)
     }
     
     func detect(){
@@ -50,12 +69,14 @@ class CroppingController: UIViewController {
     }
     
     func showVertices(_ CGPoints:[CGPoint]){
-        let verticeSize = 16.0
+        let verticeSize = 24.0
         var index = 0
         for point in CGPoints {
             let vertice = Vertice()
             self.view.addSubview(vertice)
-            vertice.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
+            let tapGesture = UITapGestureRecognizer(target: self, action:  #selector (self.tapAction (_:)))
+            vertice.addGestureRecognizer(tapGesture)
+            vertice.backgroundColor = UIColor.init(red: 255, green: 0, blue: 0, alpha: 0.5)
             let x = point.x + getOffsetX(index: index, size: verticeSize)
             let y = point.y + getOffsetY(index: index, size: verticeSize)
             vertice.frame = CGRect.init(x: x, y: y, width: verticeSize, height: verticeSize)
