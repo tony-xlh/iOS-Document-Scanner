@@ -146,7 +146,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 
                 DispatchQueue.main.async {
                     var points = results?[0].location.points as! [CGPoint]
-                    points = Utils.updatePoints(points, checkOrientation: true, frameWidth: Double(width), frameHeight: Double(height), viewWidth: self.view.frame.width, viewHeight: self.view.frame.height)
+                    points = Utils.scaleAndRotatePoints(points, frameWidth: Double(width), frameHeight: Double(height), viewWidth: self.view.frame.width, viewHeight: self.view.frame.height)
                     self.overlay.points = points
                     self.overlay.setNeedsDisplay()
                 }

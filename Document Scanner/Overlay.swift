@@ -17,7 +17,13 @@ class Overlay: UIView {
             let aPath = UIBezierPath()
 
             print(points[0].x)
+            print(points[0].y)
+            print(points[1].x)
             print(points[1].y)
+            print(points[2].x)
+            print(points[2].y)
+            print(points[3].x)
+            print(points[3].y)
             aPath.move(to: points[0])
             aPath.addLine(to: points[1])
             aPath.move(to: points[1])

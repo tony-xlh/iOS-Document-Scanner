@@ -13,29 +13,29 @@ class Utils {
     static func scalePoints(_ points:[CGPoint], xPercent:Double, yPercent:Double) -> [CGPoint]{
         var newPoints:[CGPoint] = []
         for point in points {
-            let x = point.x / xPercent
-            let y = point.y / yPercent
+            let x = point.x * xPercent
+            let y = point.y * yPercent
             let newPoint = CGPoint(x: x, y: y)
             newPoints.append(newPoint)
         }
         return newPoints
     }
     
-    static func updatePoints(_ points:[CGPoint],checkOrientation:Bool, frameWidth:Double, frameHeight:Double,viewWidth:Double, viewHeight:Double) -> [CGPoint]{
+    static func scaleAndRotatePoints(_ points:[CGPoint], frameWidth:Double, frameHeight:Double,viewWidth:Double, viewHeight:Double) -> [CGPoint]{
         var newPoints:[CGPoint] = []
         for point in points {
             var x = point.x
             var y = point.y
-            if checkOrientation {
-                let orientation = UIDevice.current.orientation
-                if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
-                    x = frameHeight - point.y;
-                    y = point.x;
-                } else if orientation == .landscapeRight {
-                    x = frameWidth - point.x;
-                    y = frameHeight - point.y;
-                }
+
+            let orientation = UIDevice.current.orientation
+            if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
+                x = frameHeight - point.y;
+                y = point.x;
+            } else if orientation == .landscapeRight {
+                x = frameWidth - point.x;
+                y = frameHeight - point.y;
             }
+
             x = x * xPercent(frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
             y = y * yPercent(frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
             let newPoint = CGPoint(x: x, y: y)

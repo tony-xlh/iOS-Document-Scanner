@@ -24,6 +24,8 @@ class CroppingController: UIViewController {
         print(self.image.cgImage?.height)
         self.image = Utils.normalizedImage(self.image)
         print(self.image.imageOrientation.rawValue)
+        print(self.image.size.width)
+        print(self.image.size.height)
         print(self.image.cgImage?.width)
         print(self.image.cgImage?.height)
         self.imageView = UIImageView(frame: .zero)
@@ -36,7 +38,7 @@ class CroppingController: UIViewController {
         self.toolbar.items = [retakeButton,flexibleSpace,okayButton]
         self.view.addSubview(self.imageView)
         self.view.addSubview(self.overlay)
-        self.view.addSubview(self.toolbar)
+        //self.view.addSubview(self.toolbar)
         detect()
     }
     
@@ -47,8 +49,16 @@ class CroppingController: UIViewController {
             print(results?.count ?? 0)
             if results?.count ?? 0 > 0 {
                 self.points = results?[0].location.points as? [CGPoint]
-                self.points = Utils.updatePoints(self.points, checkOrientation: false, frameWidth: Double(image.cgImage!.width), frameHeight: Double(image.cgImage!.height), viewWidth: self.view.frame.width, viewHeight: self.view.frame.height)
-                self.overlay.points = self.points
+                print(points[0].x)
+                print(points[0].y)
+                print(points[1].x)
+                print(points[1].y)
+                print(points[2].x)
+                print(points[2].y)
+                print(points[3].x)
+                print(points[3].y)
+                let CGPoints = Utils.scalePoints(self.points, xPercent: self.view.frame.width/self.image.size.width, yPercent: self.view.frame.height/self.image.size.height)
+                self.overlay.points = CGPoints
                 self.overlay.setNeedsDisplay()
             }
         }
