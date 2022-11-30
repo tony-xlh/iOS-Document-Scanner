@@ -22,6 +22,9 @@ class ViewController: UIViewController {
         self.button.addTarget(self,
                          action: #selector(buttonAction),
                          for: .touchUpInside)
+        self.navigationItem.title = "Home"
+        
+        self.view.backgroundColor = UIColor.white
         self.view.addSubview(self.button)
     }
 
@@ -39,9 +42,10 @@ class ViewController: UIViewController {
     @objc
     func buttonAction() {
         print("button pressed")
-        let nav = UINavigationController(rootViewController: CameraController())
-        nav.modalPresentationStyle = .fullScreen
-        self.present(nav, animated: true, completion: nil)
+        //let nav = UINavigationController(rootViewController: CameraController())
+        //nav.modalPresentationStyle = .fullScreen
+        //self.present(nav, animated: true, completion: nil)
+        self.navigationController?.pushViewController(CameraController(), animated: true)
     }
 }
 
