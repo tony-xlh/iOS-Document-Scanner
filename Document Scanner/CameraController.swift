@@ -86,6 +86,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             self.captureSession.stopRunning()
             if let imageData = photo.fileDataRepresentation() {
                 let image = UIImage(data: imageData)
+                print(image?.imageOrientation.rawValue)
                 print(image?.size.width)
                 print(image?.size.height)
                 navigateToCropper(image!)
@@ -96,6 +97,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     func navigateToCropper(_ image:UIImage){
         let controller = CroppingController()
         controller.image = image
+        controller.ddn = self.ddn
         navigationController?.pushViewController(controller, animated: true)
     }
 
@@ -143,11 +145,9 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 }
                 
                 DispatchQueue.main.async {
-                    self.overlay.frameWidth = Double(width)
-                    self.overlay.frameHeight = Double(height)
-                    self.overlay.viewWidth = self.view.frame.width
-                    self.overlay.viewHeight = self.view.frame.height
-                    self.overlay.result=results?[0]
+                    var points = results?[0].location.points as! [CGPoint]
+                    points = Utils.updatePoints(points, checkOrientation: true, frameWidth: Double(width), frameHeight: Double(height), viewWidth: self.view.frame.width, viewHeight: self.view.frame.height)
+                    self.overlay.points = points
                     self.overlay.setNeedsDisplay()
                 }
             }

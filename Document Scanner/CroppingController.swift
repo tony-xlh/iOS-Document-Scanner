@@ -6,39 +6,73 @@
 //
 
 import UIKit
+import DynamsoftDocumentNormalizer
 
 class CroppingController: UIViewController {
     var imageView: UIImageView!
     var image:UIImage!
+    var overlay: Overlay!
     var toolbar:UIToolbar!
-    
+    var ddn:DynamsoftDocumentNormalizer!
+    var points:[CGPoint]!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+
+        print(self.image.imageOrientation.rawValue)
+        print(self.image.cgImage?.width)
+        print(self.image.cgImage?.height)
+        self.image = Utils.normalizedImage(self.image)
+        print(self.image.imageOrientation.rawValue)
+        print(self.image.cgImage?.width)
+        print(self.image.cgImage?.height)
         self.imageView = UIImageView(frame: .zero)
-        self.imageView.image = image
+        self.imageView.image = self.image
+        self.overlay = Overlay()
         self.toolbar = UIToolbar.init()
         let retakeButton = UIBarButtonItem.init(title: "Retake", style: .plain, target: self, action: #selector(retakeAction))
         let okayButton =  UIBarButtonItem.init(title: "Okay", style: .plain, target: self, action: #selector(okayAction))
         let flexibleSpace = UIBarButtonItem.flexibleSpace()
         self.toolbar.items = [retakeButton,flexibleSpace,okayButton]
         self.view.addSubview(self.imageView)
+        self.view.addSubview(self.overlay)
         self.view.addSubview(self.toolbar)
+        detect()
+    }
+    
+    func detect(){
+        if let ddn = self.ddn {
+            let results = try? ddn.detectQuadFromImage(self.image)
+            print("count:")
+            print(results?.count ?? 0)
+            if results?.count ?? 0 > 0 {
+                self.points = results?[0].location.points as? [CGPoint]
+                self.points = Utils.updatePoints(self.points, checkOrientation: false, frameWidth: Double(image.cgImage!.width), frameHeight: Double(image.cgImage!.height), viewWidth: self.view.frame.width, viewHeight: self.view.frame.height)
+                self.overlay.points = self.points
+                self.overlay.setNeedsDisplay()
+            }
+        }
     }
     
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if let imageView = self.imageView {
-            //let top = self.navigationController?.navigationBar.frame.maxY ?? 0
             let width: CGFloat = view.frame.width
             let height: CGFloat = view.frame.height
             let x: CGFloat = 0.0
             let y: CGFloat = 0.0
             imageView.frame = CGRect.init(x: x, y: y, width: width, height: height)
         }
+        if let overlay = self.overlay {
+            let width: CGFloat = view.frame.width
+            let height: CGFloat = view.frame.height
+            let x: CGFloat = 0.0
+            let y: CGFloat = 0.0
+            overlay.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
+            overlay.frame = CGRect.init(x: x, y: y, width: width, height: height)
+        }
         if let toolbar = self.toolbar {
-            //let top = self.navigationController?.navigationBar.frame.maxY ?? 0
             let width: CGFloat = view.frame.width
             let height: CGFloat = 32
             let x: CGFloat = 0.0

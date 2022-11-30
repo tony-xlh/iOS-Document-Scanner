@@ -10,18 +10,31 @@ import UIKit
 
 
 class Utils {
-    static func updatePoints(_ points:[CGPoint], frameWidth:Double, frameHeight:Double,viewWidth:Double, viewHeight:Double) -> [CGPoint]{
+    static func scalePoints(_ points:[CGPoint], xPercent:Double, yPercent:Double) -> [CGPoint]{
+        var newPoints:[CGPoint] = []
+        for point in points {
+            let x = point.x / xPercent
+            let y = point.y / yPercent
+            let newPoint = CGPoint(x: x, y: y)
+            newPoints.append(newPoint)
+        }
+        return newPoints
+    }
+    
+    static func updatePoints(_ points:[CGPoint],checkOrientation:Bool, frameWidth:Double, frameHeight:Double,viewWidth:Double, viewHeight:Double) -> [CGPoint]{
         var newPoints:[CGPoint] = []
         for point in points {
             var x = point.x
             var y = point.y
-            let orientation = UIDevice.current.orientation
-            if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
-                x = frameHeight - point.y;
-                y = point.x;
-            } else if orientation == .landscapeRight {
-                x = frameWidth - point.x;
-                y = frameHeight - point.y;
+            if checkOrientation {
+                let orientation = UIDevice.current.orientation
+                if  orientation == .portrait || orientation == .unknown || orientation == .faceUp {
+                    x = frameHeight - point.y;
+                    y = point.x;
+                } else if orientation == .landscapeRight {
+                    x = frameWidth - point.x;
+                    y = frameHeight - point.y;
+                }
             }
             x = x * xPercent(frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
             y = y * yPercent(frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
@@ -41,9 +54,9 @@ class Utils {
     
     static func yPercent(frameWidth:Double, frameHeight:Double,viewWidth:Double, viewHeight:Double) -> Double {
         if (frameWidth>frameHeight && viewWidth>viewHeight) {
-            return viewWidth/frameWidth
+            return viewHeight/frameHeight
         }else{
-            return viewWidth/frameHeight
+            return viewHeight/frameWidth
         }
     }
     
@@ -86,5 +99,16 @@ class Utils {
         
         let r = CGRect(x: minX, y: minY, width: maxX-minX, height: maxY-minY)
         return r
+    }
+    
+    static func normalizedImage(_ image:UIImage) -> UIImage {
+        if image.imageOrientation == UIImage.Orientation.up {
+            return image
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(x:0,y:0,width:image.size.width,height:image.size.height))
+        let normalized = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext();
+        return normalized
     }
 }

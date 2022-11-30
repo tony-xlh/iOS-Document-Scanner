@@ -9,26 +9,23 @@ import UIKit
 import DynamsoftDocumentNormalizer
 
 class Overlay: UIView {
-    var result:iDetectedQuadResult? = nil
-    var frameWidth = 1280.0
-    var frameHeight = 720.0
-    var viewWidth = 1280.0
-    var viewHeight = 720.0
+    var points:[CGPoint] = []
     override func draw(_ rect: CGRect) {
-        if result != nil {
+        print("draw")
+        print(points.count)
+        if points.count == 4 {
             let aPath = UIBezierPath()
-            var CGPoints = result?.location.points as! [CGPoint]
-            CGPoints = Utils.updatePoints(CGPoints,frameWidth:frameWidth,frameHeight:frameHeight,viewWidth:viewWidth,viewHeight:viewHeight)
-            print(CGPoints[0].x)
-            print(CGPoints[1].y)
-            aPath.move(to: CGPoints[0])
-            aPath.addLine(to: CGPoints[1])
-            aPath.move(to: CGPoints[1])
-            aPath.addLine(to: CGPoints[2])
-            aPath.move(to: CGPoints[2])
-            aPath.addLine(to: CGPoints[3])
-            aPath.move(to: CGPoints[3])
-            aPath.addLine(to: CGPoints[0])
+
+            print(points[0].x)
+            print(points[1].y)
+            aPath.move(to: points[0])
+            aPath.addLine(to: points[1])
+            aPath.move(to: points[1])
+            aPath.addLine(to: points[2])
+            aPath.move(to: points[2])
+            aPath.addLine(to: points[3])
+            aPath.move(to: points[3])
+            aPath.addLine(to: points[0])
 
             // Keep using the method addLine until you get to the one where about to close the path
             aPath.close()
