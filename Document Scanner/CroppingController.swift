@@ -51,12 +51,40 @@ class CroppingController: UIViewController {
     
     func showVertices(_ CGPoints:[CGPoint]){
         let verticeSize = 16.0
+        var index = 0
         for point in CGPoints {
             let vertice = Vertice()
             self.view.addSubview(vertice)
             vertice.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
-            vertice.frame = CGRect.init(x: point.x, y: point.y, width: verticeSize, height: verticeSize)
+            let x = point.x + getOffsetX(index: index, size: verticeSize)
+            let y = point.y + getOffsetY(index: index, size: verticeSize)
+            vertice.frame = CGRect.init(x: x, y: y, width: verticeSize, height: verticeSize)
             vertices.append(vertice)
+            index = index + 1
+        }
+    }
+    
+    func getOffsetX(index:Int, size:Double) -> Double {
+        if index == 0 {
+            return -size
+        }else if index == 1 {
+            return 0
+        }else if index == 2 {
+            return 0
+        }else {
+            return -size
+        }
+    }
+    
+    func getOffsetY(index:Int, size:Double) -> Double {
+        if index == 0 {
+            return -size
+        }else if index == 1 {
+            return -size
+        }else if index == 2 {
+            return 0
+        }else {
+            return 0
         }
     }
     
