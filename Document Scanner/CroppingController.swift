@@ -17,6 +17,10 @@ class CroppingController: UIViewController {
     var points:[CGPoint]!
     var vertices:[Vertice] = []
     var selectedVertice:Vertice!
+    var touchedX = -1.0
+    var touchedY = -1.0
+    var initialVerticeX = -1.0
+    var initialVerticeY = -1.0
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -68,6 +72,29 @@ class CroppingController: UIViewController {
         // do other task
         print("pan gesture")
         print(sender.view?.description)
+        let point = sender.location(in: self.view)
+        print(point.x)
+        print(point.y)
+        let translation = sender.translation(in: self.view)
+        print(translation.x)
+        print(translation.y)
+        let pTouchedX = point.x - translation.x
+        let pTouchedY = point.y - translation.y
+
+        if pTouchedX != self.touchedX || pTouchedY != self.touchedY {
+            self.touchedX = pTouchedX
+            self.touchedY = pTouchedY
+            self.initialVerticeX = selectedVertice.frame.minX
+            self.initialVerticeY = selectedVertice.frame.minY
+        }
+        
+        if selectedVertice != nil {
+            let x = self.initialVerticeX + translation.x
+            let y = self.initialVerticeY + translation.y
+            let width = selectedVertice.frame.width
+            let height = selectedVertice.frame.height
+            selectedVertice.frame = CGRect.init(x: x, y: y, width: width, height: height)
+        }
     }
     
     func detect(){
