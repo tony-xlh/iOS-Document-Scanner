@@ -71,29 +71,44 @@ class CroppingController: UIViewController {
     @objc func panAction(_ sender:UIPanGestureRecognizer){
         // do other task
         print("pan gesture")
-        print(sender.view?.description)
-        let point = sender.location(in: self.view)
-        print(point.x)
-        print(point.y)
-        let translation = sender.translation(in: self.view)
-        print(translation.x)
-        print(translation.y)
-        let pTouchedX = point.x - translation.x
-        let pTouchedY = point.y - translation.y
-
-        if pTouchedX != self.touchedX || pTouchedY != self.touchedY {
-            self.touchedX = pTouchedX
-            self.touchedY = pTouchedY
-            self.initialVerticeX = selectedVertice.frame.minX
-            self.initialVerticeY = selectedVertice.frame.minY
-        }
         
         if selectedVertice != nil {
-            let x = self.initialVerticeX + translation.x
-            let y = self.initialVerticeY + translation.y
+            let point = sender.location(in: self.view)
+            let translation = sender.translation(in: self.view)
+            let pTouchedX = point.x - translation.x
+            let pTouchedY = point.y - translation.y
+            if pTouchedX != self.touchedX || pTouchedY != self.touchedY {
+                self.touchedX = pTouchedX
+                self.touchedY = pTouchedY
+                self.initialVerticeX = selectedVertice.frame.minX
+                self.initialVerticeY = selectedVertice.frame.minY
+            }
+            var x = self.initialVerticeX + translation.x
+            var y = self.initialVerticeY + translation.y
             let width = selectedVertice.frame.width
             let height = selectedVertice.frame.height
             selectedVertice.frame = CGRect.init(x: x, y: y, width: width, height: height)
+            let selectedIndex = vertices.firstIndex(of: selectedVertice)!
+            x = x - getOffsetX(index: selectedIndex, size: 24)
+            y = y - getOffsetY(index: selectedIndex, size: 24)
+            updatePoints(newX:x,newY:y)
+        }
+    }
+    
+    func updatePoints(newX:Double,newY:Double) {
+        if selectedVertice != nil {
+            let selectedIndex = vertices.firstIndex(of: selectedVertice)!
+            var point = points[selectedIndex]
+            let xPercent = self.view.frame.width/self.image.size.width
+            let yPercent = self.view.frame.height/self.image.size.height
+            point.x = newX/xPercent
+            point.y = newY/yPercent
+            var pointForView = self.overlay.points[selectedIndex]
+            pointForView.x = newX
+            pointForView.y = newY
+            self.overlay.points[selectedIndex] = pointForView
+            self.overlay.setNeedsDisplay()
+            
         }
     }
     
