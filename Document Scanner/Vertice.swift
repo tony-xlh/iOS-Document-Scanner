@@ -7,6 +7,7 @@
 
 import UIKit
 class Vertice: UIView {
+    var lineWidth = 3.0
     override func draw(_ rect: CGRect) {
         let h = rect.height
         let w = rect.width
@@ -14,7 +15,7 @@ class Vertice: UIView {
         let drect = CGRect(x: 0, y: 0, width: w, height: h)
         let bpath:UIBezierPath = UIBezierPath(rect: drect)
         color.set()
-        bpath.lineWidth = 3
+        bpath.lineWidth = lineWidth
         bpath.stroke()
     }
 }

@@ -16,6 +16,7 @@ class CroppingController: UIViewController {
     var ddn:DynamsoftDocumentNormalizer!
     var points:[CGPoint]!
     var vertices:[Vertice] = []
+    var selectedVertice:Vertice!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -33,6 +34,8 @@ class CroppingController: UIViewController {
         self.view.addSubview(self.overlay)
         self.view.addSubview(self.toolbar)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector (self.tapAction (_:)))
+        self.view.addGestureRecognizer(tapGesture)
         
         let panGesture = UIPanGestureRecognizer(target: self, action:  #selector (self.panAction (_:)))
         
@@ -45,6 +48,20 @@ class CroppingController: UIViewController {
         print("tap gesture")
         print(sender.view?.description)
     }
+    
+    @objc func tapActionForVertice(_ sender:UITapGestureRecognizer){
+        print("vertice tap gesture")
+        self.selectedVertice = sender.view as! Vertice
+        for vertice in vertices {
+            if self.selectedVertice == vertice {
+                vertice.lineWidth = 5
+            }else{
+                vertice.lineWidth = 3
+            }
+            vertice.setNeedsDisplay()
+        }
+    }
+    
     
     
     @objc func panAction(_ sender:UIPanGestureRecognizer){
@@ -74,7 +91,7 @@ class CroppingController: UIViewController {
         for point in CGPoints {
             let vertice = Vertice()
             self.view.addSubview(vertice)
-            let tapGesture = UITapGestureRecognizer(target: self, action:  #selector (self.tapAction (_:)))
+            let tapGesture = UITapGestureRecognizer(target: self, action:  #selector (self.tapActionForVertice (_:)))
             vertice.addGestureRecognizer(tapGesture)
             vertice.backgroundColor = UIColor.init(red: 255, green: 0, blue: 0, alpha: 0.5)
             let x = point.x + getOffsetX(index: index, size: verticeSize)
