@@ -98,11 +98,12 @@ class CroppingController: UIViewController {
     func updatePoints(newX:Double,newY:Double) {
         if selectedVertice != nil {
             let selectedIndex = vertices.firstIndex(of: selectedVertice)!
-            var point = points[selectedIndex]
+            var point = self.points[selectedIndex]
             let xPercent = self.view.frame.width/self.image.size.width
             let yPercent = self.view.frame.height/self.image.size.height
             point.x = newX/xPercent
             point.y = newY/yPercent
+            self.points[selectedIndex] = point
             var pointForView = self.overlay.points[selectedIndex]
             pointForView.x = newX
             pointForView.y = newY
@@ -214,6 +215,9 @@ class CroppingController: UIViewController {
     @objc
     func okayAction() {
         let vc = ResultViewerController()
+        vc.points = self.points
+        vc.ddn = self.ddn
+        vc.image = self.image
         self.navigationController?.pushViewController(vc, animated:true)
     }
     
