@@ -373,6 +373,8 @@
 				DEVELOPMENT_TEAM = XQ6X448L48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Document Scanner/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "For camera usage";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "For saving photos";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -382,7 +384,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xulihang.documentscanner;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tonyxlh.documentscanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -401,6 +403,8 @@
 				DEVELOPMENT_TEAM = M6ARZB9W3T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Document Scanner/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "For camera usage";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "For saving photos";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

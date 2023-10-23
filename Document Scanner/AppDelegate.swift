@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListen
         let navController = UINavigationController(rootViewController: vc)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
-        DynamsoftLicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxMDc0MDY2LVRYbE5iMkpwYkdWUWNtOXFYMlJrYmciLCJvcmdhbml6YXRpb25JRCI6IjEwMTA3NDA2NiIsImNoZWNrQ29kZSI6MTYyNTI3MTI4OH0=", verificationDelegate: self)
+        DynamsoftLicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==", verificationDelegate: self)
         return true
     }
 
