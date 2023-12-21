@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import DynamsoftCore
+import DynamsoftCaptureVisionRouter
 import DynamsoftDocumentNormalizer
 
 class ResultViewerController: UIViewController {
     var imageView: UIImageView!
     var image: UIImage!
-    var ddn:DynamsoftDocumentNormalizer!
+    var cvr:CaptureVisionRouter!
     var points:[CGPoint]!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,11 +35,22 @@ class ResultViewerController: UIViewController {
     }
     
     func normalize(){
-        let quad = iQuadrilateral()
-        quad.points = points
-        let normalizedResult = try? ddn.normalizeImage(self.image, quad: quad)
-        let normazliedImage = try? normalizedResult?.image.toUIImage()
-        self.imageView.image = normazliedImage
+        let quad = Quadrilateral.init(pointArray: points)
+        let settings = try? cvr.getSimplifiedSettings("NormalizeDocument_Binary")
+        settings?.roi = quad
+        settings?.roiMeasuredInPercentage = false
+        try? cvr.updateSettings("NormalizeDocument_Binary", settings: settings!)
+        let capturedResult = cvr.captureFromImage(self.image, templateName: "NormalizeDocument_Binary")
+        let results = capturedResult.items
+        if results != nil {
+            if results?.count ?? 0 > 0 {
+                let normalizedResult = results?[0] as! NormalizedImageResultItem
+                let normazliedImage = try? normalizedResult.imageData?.toUIImage()
+                self.imageView.image = normazliedImage
+            }
+        }
+        
+        
     }
 
     override func viewDidLayoutSubviews() {

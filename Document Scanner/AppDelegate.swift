@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import DynamsoftDocumentNormalizer
+import DynamsoftLicense
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListener  {
@@ -18,15 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LicenseVerificationListen
         let navController = UINavigationController(rootViewController: vc)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
-        DynamsoftLicenseManager.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==", verificationDelegate: self)
+        let trialLicense = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ=="; //one-day public trial
+        LicenseManager.initLicense(trialLicense, verificationDelegate: self)
         return true
     }
 
    
     
-    func licenseVerificationCallback(_ isSuccess: Bool, error: Error?) {
-        // Add your code to execute when the license server handles callback.
-        print(error?.localizedDescription)
+    func onLicenseVerified(_ isSuccess: Bool, error: Error?) {
+        print(error?.localizedDescription ?? "license error")
     }
 
 

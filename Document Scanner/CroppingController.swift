@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import DynamsoftCore
+import DynamsoftCaptureVisionRouter
 import DynamsoftDocumentNormalizer
 
 class CroppingController: UIViewController {
@@ -13,7 +15,7 @@ class CroppingController: UIViewController {
     var image:UIImage!
     var overlay: Overlay!
     var toolbar:UIToolbar!
-    var ddn:DynamsoftDocumentNormalizer!
+    var cvr:CaptureVisionRouter!
     var points:[CGPoint]!
     var vertices:[Vertice] = []
     var selectedVertice:Vertice!
@@ -114,12 +116,12 @@ class CroppingController: UIViewController {
     }
     
     func detect(){
-        if let ddn = self.ddn {
-            let results = try? ddn.detectQuadFromImage(self.image)
-            print("count:")
-            print(results?.count ?? 0)
+        if let cvr = self.cvr {
+            let capturedResult = cvr.captureFromImage(self.image,templateName: "DetectDocumentBoundaries_Default")
+            let results = capturedResult.items
             if results?.count ?? 0 > 0 {
-                self.points = results?[0].location.points as? [CGPoint]
+                let result = results?[0] as! DetectedQuadResultItem
+                self.points = result.location.points as? [CGPoint]
                 let CGPoints = Utils.scalePoints(self.points, xPercent: self.view.frame.width/self.image.size.width, yPercent: self.view.frame.height/self.image.size.height)
                 showVertices(CGPoints)
                 self.overlay.points = CGPoints
@@ -216,7 +218,7 @@ class CroppingController: UIViewController {
     func okayAction() {
         let vc = ResultViewerController()
         vc.points = self.points
-        vc.ddn = self.ddn
+        vc.cvr = self.cvr
         vc.image = self.image
         self.navigationController?.pushViewController(vc, animated:true)
     }

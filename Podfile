@@ -6,8 +6,9 @@ target 'Document Scanner' do
   use_frameworks!
 
   # Pods for Document Scanner
-  pod 'DynamsoftDocumentNormalizer','1.0.20'
-  pod 'DynamsoftCore','2.0.2'
-  pod 'DynamsoftImageProcessing','1.0.20'
-  pod 'DynamsoftIntermediateResult','1.0.20'
+  pod 'DynamsoftCaptureVisionRouter','2.0.21'
+  pod 'DynamsoftDocumentNormalizer','2.0.20'
+  pod 'DynamsoftCore','3.0.20'
+  pod 'DynamsoftLicense','3.0.30'
+  pod 'DynamsoftImageProcessing','2.0.21'
 end
